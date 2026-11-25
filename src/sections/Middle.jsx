@@ -55,7 +55,7 @@ export function Founders() {
           </div>
         </div>
 
-        <Reveal className="story-video story-video--center" delay={140}>
+        <Reveal className={`story-video story-video--center ${playing ? "is-playing" : ""}`} delay={140}>
           {playing ? (
             <video
               src="/videos/company-intro.mp4"

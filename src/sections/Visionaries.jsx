@@ -62,7 +62,7 @@ function BlurText({
    ───────────────────────────────────────────── */
 const VISIONARY_IMAGES = [
   "/assets/visionaries/visionary-1.jpg",
-  "/assets/visionaries/visionary-2.png",
+  "/assets/visionaries/visionary-2.jpg",
   "/assets/visionaries/visionary-3.png",
   "/assets/visionaries/visionary-4.png",
   "/assets/visionaries/visionary-5.png",
@@ -76,9 +76,12 @@ const VISIONARY_IMAGES = [
 const SLIDE_INTERVAL_MS = 1500;
 
 function VisionarySlider() {
+  const [failed, setFailed] = useState(() => new Set());
+  const images = VISIONARY_IMAGES.filter(src => !failed.has(src));
   const [current, setCurrent] = useState(0);
   const timerRef = useRef(null);
-  const total = VISIONARY_IMAGES.length;
+  const total = images.length || 1;
+  const safeCurrent = current % total;
 
   const startTimer = useCallback(() => {
     clearInterval(timerRef.current);
@@ -92,25 +95,19 @@ function VisionarySlider() {
     return () => clearInterval(timerRef.current);
   }, [startTimer]);
 
-  const prev = () => {
-    setCurrent(c => (c - 1 + total) % total);
-    startTimer();
-  };
-
-  const next = () => {
-    setCurrent(c => (c + 1) % total);
-    startTimer();
-  };
-
-  const goTo = (index) => {
-    setCurrent(index);
-    startTimer();
+  const handleImageError = (src) => {
+    setFailed(prev => {
+      if (prev.has(src)) return prev;
+      const nextSet = new Set(prev);
+      nextSet.add(src);
+      return nextSet;
+    });
   };
 
   const getSlideClass = (i) => {
-    if (i === current) return "vis-slide vis-slide--active";
-    const prevIdx = (current - 1 + total) % total;
-    const nextIdx = (current + 1) % total;
+    if (i === safeCurrent) return "vis-slide vis-slide--active";
+    const prevIdx = (safeCurrent - 1 + total) % total;
+    const nextIdx = (safeCurrent + 1) % total;
     if (i === prevIdx) return "vis-slide vis-slide--prev";
     if (i === nextIdx) return "vis-slide vis-slide--next";
     return "vis-slide vis-slide--hidden";
@@ -119,36 +116,21 @@ function VisionarySlider() {
   return (
     <div className="vis-slider" aria-label="Visionary moments gallery" role="region">
       <div className="vis-track">
-        {VISIONARY_IMAGES.map((src, i) => (
-          <div key={src} className={getSlideClass(i)} aria-hidden={i !== current}>
+        {images.map((src, i) => (
+          <div key={src} className={getSlideClass(i)} aria-hidden={i !== safeCurrent}>
             <div className="vis-img-wrap">
               <img
                 src={src}
                 alt={`LBA '26 visionary moment ${i + 1}`}
                 className="vis-img"
                 loading={i < 2 ? "eager" : "lazy"}
+                onError={() => handleImageError(src)}
               />
               <div className="vis-img-shine" aria-hidden="true" />
             </div>
           </div>
         ))}
       </div>
-
-      <div className="vis-dots" role="tablist" aria-label="Slide navigation">
-        {VISIONARY_IMAGES.map((_, i) => (
-          <button
-            key={i}
-            role="tab"
-            aria-selected={i === current}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`vis-dot ${i === current ? "vis-dot--active" : ""}`}
-            onClick={() => goTo(i)}
-          />
-        ))}
-      </div>
-
-      <button className="vis-nav vis-nav--prev" onClick={prev} aria-label="Previous image">‹</button>
-      <button className="vis-nav vis-nav--next" onClick={next} aria-label="Next image">›</button>
     </div>
   );
 }
