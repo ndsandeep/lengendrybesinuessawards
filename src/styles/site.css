@@ -3382,18 +3382,27 @@ body.has-curtain {
   pointer-events: none;
 }
 
-/* Prev / Next arrows */
+/* Prev / Next arrows below the frame */
+.vis-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.vis-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
 .vis-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(21, 18, 15, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(21, 18, 15, 0.88);
   border: 1px solid var(--line-strong);
   color: var(--text);
   font-size: 1.5rem;
@@ -3401,17 +3410,16 @@ body.has-curtain {
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s, color 0.2s;
 }
 
-.vis-nav:hover {
-  background: rgba(255, 91, 31, 0.3);
+.vis-nav:hover,
+.vis-nav:active {
+  background: rgba(255, 91, 31, 0.25);
   border-color: var(--accent);
-  transform: translateY(-50%) scale(1.1);
+  color: var(--gold-hi);
+  transform: scale(1.08);
 }
-
-.vis-nav--prev { left: 10px; }
-.vis-nav--next { right: 10px; }
 
 /* Dots */
 .vis-dots {

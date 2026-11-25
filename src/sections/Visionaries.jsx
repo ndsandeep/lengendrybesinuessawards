@@ -95,6 +95,16 @@ function VisionarySlider() {
     return () => clearInterval(timerRef.current);
   }, [startTimer]);
 
+  const prev = () => {
+    setCurrent(c => (c - 1 + total) % total);
+    startTimer();
+  };
+
+  const next = () => {
+    setCurrent(c => (c + 1) % total);
+    startTimer();
+  };
+
   const handleImageError = (src) => {
     setFailed(prev => {
       if (prev.has(src)) return prev;
@@ -114,22 +124,29 @@ function VisionarySlider() {
   };
 
   return (
-    <div className="vis-slider" aria-label="Visionary moments gallery" role="region">
-      <div className="vis-track">
-        {images.map((src, i) => (
-          <div key={src} className={getSlideClass(i)} aria-hidden={i !== safeCurrent}>
-            <div className="vis-img-wrap">
-              <img
-                src={src}
-                alt={`LBA '26 visionary moment ${i + 1}`}
-                className="vis-img"
-                loading={i < 2 ? "eager" : "lazy"}
-                onError={() => handleImageError(src)}
-              />
-              <div className="vis-img-shine" aria-hidden="true" />
+    <div className="vis-slider-wrap" aria-label="Visionary moments gallery" role="region">
+      <div className="vis-slider">
+        <div className="vis-track">
+          {images.map((src, i) => (
+            <div key={src} className={getSlideClass(i)} aria-hidden={i !== safeCurrent}>
+              <div className="vis-img-wrap">
+                <img
+                  src={src}
+                  alt={`LBA '26 visionary moment ${i + 1}`}
+                  className="vis-img"
+                  loading={i < 2 ? "eager" : "lazy"}
+                  onError={() => handleImageError(src)}
+                />
+                <div className="vis-img-shine" aria-hidden="true" />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      <div className="vis-controls">
+        <button className="vis-nav" onClick={prev} aria-label="Previous image">‹</button>
+        <button className="vis-nav" onClick={next} aria-label="Next image">›</button>
       </div>
     </div>
   );
