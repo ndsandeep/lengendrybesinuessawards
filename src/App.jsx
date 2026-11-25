@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ScrollProgress, SiteHeader, StickyBar, FloatingCard } from "./components/layout/SiteChrome.jsx";
 import { Hero, Ribbons, Theme } from "./sections/Opening.jsx";
+import { Visionaries } from "./sections/Visionaries.jsx";
 import { Evening, EventFlow, WhyEvent } from "./sections/Evening.jsx";
 import { Founders, Awards, Audience, Takeaway } from "./sections/Middle.jsx";
 import { Guests } from "./sections/Guests.jsx";
@@ -41,6 +42,7 @@ export default function App() {
           <Hero onRegister={() => openRegistration()} onEnquire={openEnquiry} />
         </div>
         <Ribbons />
+        <Visionaries />
         <Theme />
         <Evening />
         <EventFlow />

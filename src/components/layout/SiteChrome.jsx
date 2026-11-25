@@ -53,12 +53,16 @@ export function SiteHeader({ onRegister }) {
               go(id);
             }}
           >
-            {label}
+            <span>{label}</span>
+            <span className="nav-arrow" aria-hidden="true">→</span>
           </a>
         ))}
         <button className="btn btn--solid nav-mobile-cta" onClick={() => { setOpen(false); onRegister(); }}>
           Nominate now
         </button>
+        <div className="nav-mobile-footer" aria-hidden="true">
+          <p className="nav-mobile-date">{EVENT.dateLabel} · {EVENT.venue}</p>
+        </div>
       </nav>
 
       <button className="btn btn--solid btn--sm header-cta" onClick={onRegister}>
